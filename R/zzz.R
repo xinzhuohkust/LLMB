@@ -1,4 +1,4 @@
-.onLoad <- function(libname, pkgname) {
+.onLoad <- \(libname, pkgname) {
 
   cryptojs_env <- new.env(parent = emptyenv())
 

@@ -1,3 +1,0 @@
-library(LLMB)
-
-LLMB::keyword_search()

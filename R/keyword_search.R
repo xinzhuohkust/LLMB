@@ -39,12 +39,13 @@ keyword_search <- purrr::possibly(
     Sys.sleep(sleep)
 
     if (httr2::resp_status(result) == 200) {
-      switch(format,
+      result <- switch(format,
         "string" = httr2::resp_body_string(result),
         "tibble" = cryptojs_env$json_to_tibble(result),
         "JSON" = httr2::resp_body_json(result),
         stop("Only three avilable output formats for the results: JSON, tibble or string")
       )
+      return(result)
     } else {
       stop("\terror occurs!")
     }

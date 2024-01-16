@@ -177,6 +177,8 @@ Su, Zheng, and Tianguang Meng. 2016. <span>“Selective Responsiveness: Online P
 </section>
 <section id="usage" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Usage</h1>
+<section id="single-keywords" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="single-keywords"><span class="header-section-number">2.1</span> Single keywords</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">keyword_search</span>(</span>
 <span id="cb2-2"><a href="#cb2-2"></a>  <span class="at">keywords =</span> <span class="st">"恒大"</span>,</span>
@@ -184,6 +186,25 @@ Su, Zheng, and Tianguang Meng. 2016. <span>“Selective Responsiveness: Online P
 <span id="cb2-4"><a href="#cb2-4"></a>  <span class="at">rows =</span> <span class="dv">10</span>, <span class="co"># or 500</span></span>
 <span id="cb2-5"><a href="#cb2-5"></a>  <span class="at">format =</span> <span class="st">"tibble"</span> <span class="co"># JSON or string</span></span>
 <span id="cb2-6"><a href="#cb2-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="multi-keywords" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="multi-keywords"><span class="header-section-number">2.2</span> Multi keywords</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"恒大"</span>, <span class="st">"碧桂园"</span>, <span class="st">"跑路"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>    <span class="fu">group_by</span>(keywords) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>    <span class="fu">reframe</span>(<span class="at">page =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>    <span class="fu">unnest</span>(page) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb3-8"><a href="#cb3-8"></a>        <span class="at">data =</span> <span class="fu">map2</span>(</span>
+<span id="cb3-9"><a href="#cb3-9"></a>            keywords,</span>
+<span id="cb3-10"><a href="#cb3-10"></a>            page,</span>
+<span id="cb3-11"><a href="#cb3-11"></a>            <span class="sc">~</span> <span class="fu">keyword_search</span>(.x, .y, <span class="at">rows =</span> <span class="dv">500</span>),</span>
+<span id="cb3-12"><a href="#cb3-12"></a>            <span class="at">.progress =</span> <span class="cn">TRUE</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a>        )</span>
+<span id="cb3-14"><a href="#cb3-14"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -196,10 +217,11 @@ Su, Zheng, and Tianguang Meng. 2016. <span>“Selective Responsiveness: Online P
 </div>
 </div>
 </section>
+</section>
 <section id="call-crypto-js-into-r" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Call <code>crypto-js</code> into R</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>cryptojs_env <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="st">".cryptojs_env"</span>, <span class="at">envir =</span> <span class="fu">asNamespace</span>(<span class="st">"LLMB"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>cryptojs_env <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="st">".cryptojs_env"</span>, <span class="at">envir =</span> <span class="fu">asNamespace</span>(<span class="st">"LLMB"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <!-- -->
 
@@ -617,98 +639,119 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <script src="https://giscus.app/client.js" data-repo="xinzhuohkust/comments" data-repo-id="R_kgDOIfEW2g" data-category="General" data-category-id="DIC_kwDOIfEW2s4CStOg" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">---</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="an">title:</span><span class="co"> "LLMB R package"</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="an">description:</span><span class="co"> "Real-time Search Based on a Keyword "</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="an">bibliography:</span><span class="co"> references.bib</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="an">author:</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="co">  - name: Xinzhuo Huang</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="co">    orcid: 0009-0007-6448-5114</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="co">    email: xhuangcb@connect.ust.hk</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="co">    affiliations:</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="co">     - name: HKUST SOSC</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="an">title-block-banner:</span><span class="co"> "#8F999F"</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="an">citation:</span><span class="co"> </span></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="co">    author: Huang Xinzhuo</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb4-16"><a href="#cb4-16"></a><span class="co">  html:</span></span>
-<span id="cb4-17"><a href="#cb4-17"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a><span class="co">    code-block-bg: true</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a><span class="co">    code-block-border-left: "#ffffff"</span></span>
-<span id="cb4-20"><a href="#cb4-20"></a><span class="co">    code-tools:</span></span>
-<span id="cb4-21"><a href="#cb4-21"></a><span class="co">      caption: "Source Code"</span></span>
-<span id="cb4-22"><a href="#cb4-22"></a><span class="co">    smooth-scroll: true</span></span>
-<span id="cb4-23"><a href="#cb4-23"></a><span class="co">    linestretch: 1.2</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a><span class="co">    df-print: paged</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a><span class="co">    theme:</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a><span class="co">      light: [flatly]</span></span>
-<span id="cb4-27"><a href="#cb4-27"></a><span class="co">      dark: [darkly]</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a><span class="co">    code-fold: true</span></span>
-<span id="cb4-29"><a href="#cb4-29"></a><span class="co">    code-summary: "Show the R code"</span></span>
-<span id="cb4-30"><a href="#cb4-30"></a><span class="co">    toc: false</span></span>
-<span id="cb4-31"><a href="#cb4-31"></a><span class="co">    citation-location: margin  </span></span>
-<span id="cb4-32"><a href="#cb4-32"></a><span class="co">    reference-location: margin</span></span>
-<span id="cb4-33"><a href="#cb4-33"></a><span class="co">    citations-hover: true</span></span>
-<span id="cb4-34"><a href="#cb4-34"></a><span class="co">    toc-location: right</span></span>
-<span id="cb4-35"><a href="#cb4-35"></a><span class="co">    number-sections: true</span></span>
-<span id="cb4-36"><a href="#cb4-36"></a><span class="co">    monofont: Georia</span></span>
-<span id="cb4-37"><a href="#cb4-37"></a><span class="co">    mainfont: Cambria Math</span></span>
-<span id="cb4-38"><a href="#cb4-38"></a><span class="co">    link-citations: yes</span></span>
-<span id="cb4-39"><a href="#cb4-39"></a><span class="co">    comments:</span></span>
-<span id="cb4-40"><a href="#cb4-40"></a><span class="co">      giscus:</span></span>
-<span id="cb4-41"><a href="#cb4-41"></a><span class="co">        repo: xinzhuohkust/comments</span></span>
-<span id="cb4-42"><a href="#cb4-42"></a><span class="co">      hypothesis:</span></span>
-<span id="cb4-43"><a href="#cb4-43"></a><span class="co">        theme: clean</span></span>
-<span id="cb4-44"><a href="#cb4-44"></a></span>
-<span id="cb4-45"><a href="#cb4-45"></a><span class="an">execute:</span></span>
-<span id="cb4-46"><a href="#cb4-46"></a><span class="co">    warning: false</span></span>
-<span id="cb4-47"><a href="#cb4-47"></a><span class="co">    message: false</span></span>
-<span id="cb4-48"><a href="#cb4-48"></a><span class="co">    error: false</span></span>
-<span id="cb4-49"><a href="#cb4-49"></a><span class="co">---</span></span>
-<span id="cb4-50"><a href="#cb4-50"></a><span class="in">```{=html}</span></span>
-<span id="cb4-51"><a href="#cb4-51"></a><span class="in">&lt;style&gt;</span></span>
-<span id="cb4-52"><a href="#cb4-52"></a><span class="in">body {text-align: justify}</span></span>
-<span id="cb4-53"><a href="#cb4-53"></a><span class="in">&lt;/style&gt;</span></span>
-<span id="cb4-54"><a href="#cb4-54"></a><span class="in">```</span></span>
-<span id="cb4-55"><a href="#cb4-55"></a>A package that allows political scientists to perform real-time searches on government responsiveness data within the <span class="co">[</span><span class="ot">Local Leader Message Board</span><span class="co">](https://liuyan.people.com.cn/)</span>, a national platform for petitioning in China @su2016selective. Utilizing the <span class="in">`V8`</span> package, this tool provides a JavaScript environment for <span class="co">[</span><span class="ot">crypto-js</span><span class="co">](https://www.npmjs.com/package/crypto-js)</span> within R, proving to be extremely helpful for reverse engineering during web scraping tasks. While currently a simple package, further development is underway to add advanced features such as additional data sources and visualization capabilities.</span>
-<span id="cb4-56"><a href="#cb4-56"></a></span>
-<span id="cb4-57"><a href="#cb4-57"></a><span class="fu"># Installation </span></span>
-<span id="cb4-58"><a href="#cb4-58"></a></span>
-<span id="cb4-61"><a href="#cb4-61"></a><span class="in">```{r}</span></span>
-<span id="cb4-62"><a href="#cb4-62"></a><span class="co">#| eval: false</span></span>
-<span id="cb4-63"><a href="#cb4-63"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb4-64"><a href="#cb4-64"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"xinzhuohkust/LLMB"</span>)</span>
-<span id="cb4-65"><a href="#cb4-65"></a></span>
-<span id="cb4-66"><a href="#cb4-66"></a><span class="fu">library</span>(LLMB)</span>
-<span id="cb4-67"><a href="#cb4-67"></a><span class="in">```</span></span>
-<span id="cb4-68"><a href="#cb4-68"></a></span>
-<span id="cb4-69"><a href="#cb4-69"></a><span class="fu"># Usage </span></span>
-<span id="cb4-70"><a href="#cb4-70"></a></span>
-<span id="cb4-73"><a href="#cb4-73"></a><span class="in">```{r}</span></span>
-<span id="cb4-74"><a href="#cb4-74"></a><span class="co">#| eval: false</span></span>
-<span id="cb4-75"><a href="#cb4-75"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb4-76"><a href="#cb4-76"></a><span class="fu">keyword_search</span>(</span>
-<span id="cb4-77"><a href="#cb4-77"></a>  <span class="at">keywords =</span> <span class="st">"恒大"</span>,</span>
-<span id="cb4-78"><a href="#cb4-78"></a>  <span class="at">page =</span> <span class="dv">1</span>,</span>
-<span id="cb4-79"><a href="#cb4-79"></a>  <span class="at">rows =</span> <span class="dv">10</span>, <span class="co"># or 500</span></span>
-<span id="cb4-80"><a href="#cb4-80"></a>  <span class="at">format =</span> <span class="st">"tibble"</span> <span class="co"># JSON or string</span></span>
-<span id="cb4-81"><a href="#cb4-81"></a>)</span>
-<span id="cb4-82"><a href="#cb4-82"></a><span class="in">```</span></span>
-<span id="cb4-83"><a href="#cb4-83"></a></span>
-<span id="cb4-86"><a href="#cb4-86"></a><span class="in">```{r}</span></span>
-<span id="cb4-87"><a href="#cb4-87"></a><span class="co">#| echo: false</span></span>
-<span id="cb4-88"><a href="#cb4-88"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, DT) </span>
-<span id="cb4-89"><a href="#cb4-89"></a></span>
-<span id="cb4-90"><a href="#cb4-90"></a><span class="fu">read_rds</span>(<span class="st">"sample_data/sample_data.Rds"</span>)</span>
-<span id="cb4-91"><a href="#cb4-91"></a><span class="in">```</span></span>
-<span id="cb4-92"><a href="#cb4-92"></a></span>
-<span id="cb4-93"><a href="#cb4-93"></a><span class="fu"># Call `crypto-js` into R</span></span>
-<span id="cb4-94"><a href="#cb4-94"></a></span>
-<span id="cb4-97"><a href="#cb4-97"></a><span class="in">```{r}</span></span>
-<span id="cb4-98"><a href="#cb4-98"></a><span class="co">#| code-fold: false</span></span>
-<span id="cb4-99"><a href="#cb4-99"></a>cryptojs_env <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="st">".cryptojs_env"</span>, <span class="at">envir =</span> <span class="fu">asNamespace</span>(<span class="st">"LLMB"</span>))</span>
-<span id="cb4-100"><a href="#cb4-100"></a><span class="in">```</span></span>
+<div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">---</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="an">title:</span><span class="co"> "LLMB R package"</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="an">description:</span><span class="co"> "Real-time Search Based on a Keyword "</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="an">bibliography:</span><span class="co"> references.bib</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="an">author:</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">  - name: Xinzhuo Huang</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">    orcid: 0009-0007-6448-5114</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">    email: xhuangcb@connect.ust.hk</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">    affiliations:</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">     - name: HKUST SOSC</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="an">title-block-banner:</span><span class="co"> "#8F999F"</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="an">citation:</span><span class="co"> </span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co">    author: Huang Xinzhuo</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="co">  html:</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="co">    code-block-bg: true</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="co">    code-block-border-left: "#ffffff"</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="co">    code-tools:</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="co">      caption: "Source Code"</span></span>
+<span id="cb5-22"><a href="#cb5-22"></a><span class="co">    smooth-scroll: true</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a><span class="co">    linestretch: 1.2</span></span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="co">    df-print: paged</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a><span class="co">    theme:</span></span>
+<span id="cb5-26"><a href="#cb5-26"></a><span class="co">      light: [flatly]</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a><span class="co">      dark: [darkly]</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a><span class="co">    code-fold: true</span></span>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="co">    code-summary: "Show the R code"</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a><span class="co">    toc: false</span></span>
+<span id="cb5-31"><a href="#cb5-31"></a><span class="co">    citation-location: margin  </span></span>
+<span id="cb5-32"><a href="#cb5-32"></a><span class="co">    reference-location: margin</span></span>
+<span id="cb5-33"><a href="#cb5-33"></a><span class="co">    citations-hover: true</span></span>
+<span id="cb5-34"><a href="#cb5-34"></a><span class="co">    toc-location: right</span></span>
+<span id="cb5-35"><a href="#cb5-35"></a><span class="co">    number-sections: true</span></span>
+<span id="cb5-36"><a href="#cb5-36"></a><span class="co">    monofont: Georia</span></span>
+<span id="cb5-37"><a href="#cb5-37"></a><span class="co">    mainfont: Cambria Math</span></span>
+<span id="cb5-38"><a href="#cb5-38"></a><span class="co">    link-citations: yes</span></span>
+<span id="cb5-39"><a href="#cb5-39"></a><span class="co">    comments:</span></span>
+<span id="cb5-40"><a href="#cb5-40"></a><span class="co">      giscus:</span></span>
+<span id="cb5-41"><a href="#cb5-41"></a><span class="co">        repo: xinzhuohkust/comments</span></span>
+<span id="cb5-42"><a href="#cb5-42"></a><span class="co">      hypothesis:</span></span>
+<span id="cb5-43"><a href="#cb5-43"></a><span class="co">        theme: clean</span></span>
+<span id="cb5-44"><a href="#cb5-44"></a></span>
+<span id="cb5-45"><a href="#cb5-45"></a><span class="an">execute:</span></span>
+<span id="cb5-46"><a href="#cb5-46"></a><span class="co">    warning: false</span></span>
+<span id="cb5-47"><a href="#cb5-47"></a><span class="co">    message: false</span></span>
+<span id="cb5-48"><a href="#cb5-48"></a><span class="co">    error: false</span></span>
+<span id="cb5-49"><a href="#cb5-49"></a><span class="co">---</span></span>
+<span id="cb5-50"><a href="#cb5-50"></a><span class="in">```{=html}</span></span>
+<span id="cb5-51"><a href="#cb5-51"></a><span class="in">&lt;style&gt;</span></span>
+<span id="cb5-52"><a href="#cb5-52"></a><span class="in">body {text-align: justify}</span></span>
+<span id="cb5-53"><a href="#cb5-53"></a><span class="in">&lt;/style&gt;</span></span>
+<span id="cb5-54"><a href="#cb5-54"></a><span class="in">```</span></span>
+<span id="cb5-55"><a href="#cb5-55"></a>A package that allows political scientists to perform real-time searches on government responsiveness data within the <span class="co">[</span><span class="ot">Local Leader Message Board</span><span class="co">](https://liuyan.people.com.cn/)</span>, a national platform for petitioning in China @su2016selective. Utilizing the <span class="in">`V8`</span> package, this tool provides a JavaScript environment for <span class="co">[</span><span class="ot">crypto-js</span><span class="co">](https://www.npmjs.com/package/crypto-js)</span> within R, proving to be extremely helpful for reverse engineering during web scraping tasks. While currently a simple package, further development is underway to add advanced features such as additional data sources and visualization capabilities.</span>
+<span id="cb5-56"><a href="#cb5-56"></a></span>
+<span id="cb5-57"><a href="#cb5-57"></a><span class="fu"># Installation </span></span>
+<span id="cb5-58"><a href="#cb5-58"></a></span>
+<span id="cb5-61"><a href="#cb5-61"></a><span class="in">```{r}</span></span>
+<span id="cb5-62"><a href="#cb5-62"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-63"><a href="#cb5-63"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb5-64"><a href="#cb5-64"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"xinzhuohkust/LLMB"</span>)</span>
+<span id="cb5-65"><a href="#cb5-65"></a></span>
+<span id="cb5-66"><a href="#cb5-66"></a><span class="fu">library</span>(LLMB)</span>
+<span id="cb5-67"><a href="#cb5-67"></a><span class="in">```</span></span>
+<span id="cb5-68"><a href="#cb5-68"></a></span>
+<span id="cb5-69"><a href="#cb5-69"></a><span class="fu"># Usage </span></span>
+<span id="cb5-70"><a href="#cb5-70"></a></span>
+<span id="cb5-71"><a href="#cb5-71"></a><span class="fu">## Single keywords</span></span>
+<span id="cb5-74"><a href="#cb5-74"></a><span class="in">```{r}</span></span>
+<span id="cb5-75"><a href="#cb5-75"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-76"><a href="#cb5-76"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb5-77"><a href="#cb5-77"></a><span class="fu">keyword_search</span>(</span>
+<span id="cb5-78"><a href="#cb5-78"></a>  <span class="at">keywords =</span> <span class="st">"恒大"</span>,</span>
+<span id="cb5-79"><a href="#cb5-79"></a>  <span class="at">page =</span> <span class="dv">1</span>,</span>
+<span id="cb5-80"><a href="#cb5-80"></a>  <span class="at">rows =</span> <span class="dv">10</span>, <span class="co"># or 500</span></span>
+<span id="cb5-81"><a href="#cb5-81"></a>  <span class="at">format =</span> <span class="st">"tibble"</span> <span class="co"># JSON or string</span></span>
+<span id="cb5-82"><a href="#cb5-82"></a>)</span>
+<span id="cb5-83"><a href="#cb5-83"></a><span class="in">```</span></span>
+<span id="cb5-84"><a href="#cb5-84"></a></span>
+<span id="cb5-85"><a href="#cb5-85"></a><span class="fu">## Multi keywords</span></span>
+<span id="cb5-86"><a href="#cb5-86"></a></span>
+<span id="cb5-89"><a href="#cb5-89"></a><span class="in">```{r}</span></span>
+<span id="cb5-90"><a href="#cb5-90"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-91"><a href="#cb5-91"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb5-92"><a href="#cb5-92"></a><span class="fu">tibble</span>(</span>
+<span id="cb5-93"><a href="#cb5-93"></a>    <span class="at">keywords =</span> <span class="fu">c</span>(<span class="st">"恒大"</span>, <span class="st">"碧桂园"</span>, <span class="st">"跑路"</span>)</span>
+<span id="cb5-94"><a href="#cb5-94"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-95"><a href="#cb5-95"></a>    <span class="fu">group_by</span>(keywords) <span class="sc">%&gt;%</span></span>
+<span id="cb5-96"><a href="#cb5-96"></a>    <span class="fu">reframe</span>(<span class="at">page =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-97"><a href="#cb5-97"></a>    <span class="fu">unnest</span>(page) <span class="sc">%&gt;%</span></span>
+<span id="cb5-98"><a href="#cb5-98"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb5-99"><a href="#cb5-99"></a>        <span class="at">data =</span> <span class="fu">map2</span>(</span>
+<span id="cb5-100"><a href="#cb5-100"></a>            keywords,</span>
+<span id="cb5-101"><a href="#cb5-101"></a>            page,</span>
+<span id="cb5-102"><a href="#cb5-102"></a>            <span class="sc">~</span> <span class="fu">keyword_search</span>(.x, .y, <span class="at">rows =</span> <span class="dv">500</span>),</span>
+<span id="cb5-103"><a href="#cb5-103"></a>            <span class="at">.progress =</span> <span class="cn">TRUE</span></span>
+<span id="cb5-104"><a href="#cb5-104"></a>        )</span>
+<span id="cb5-105"><a href="#cb5-105"></a>    )</span>
+<span id="cb5-106"><a href="#cb5-106"></a><span class="in">```</span></span>
+<span id="cb5-109"><a href="#cb5-109"></a><span class="in">```{r}</span></span>
+<span id="cb5-110"><a href="#cb5-110"></a><span class="co">#| echo: false</span></span>
+<span id="cb5-111"><a href="#cb5-111"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, DT) </span>
+<span id="cb5-112"><a href="#cb5-112"></a></span>
+<span id="cb5-113"><a href="#cb5-113"></a><span class="fu">read_rds</span>(<span class="st">"sample_data/sample_data.Rds"</span>)</span>
+<span id="cb5-114"><a href="#cb5-114"></a><span class="in">```</span></span>
+<span id="cb5-115"><a href="#cb5-115"></a></span>
+<span id="cb5-116"><a href="#cb5-116"></a><span class="fu"># Call `crypto-js` into R</span></span>
+<span id="cb5-117"><a href="#cb5-117"></a></span>
+<span id="cb5-120"><a href="#cb5-120"></a><span class="in">```{r}</span></span>
+<span id="cb5-121"><a href="#cb5-121"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb5-122"><a href="#cb5-122"></a>cryptojs_env <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="st">".cryptojs_env"</span>, <span class="at">envir =</span> <span class="fu">asNamespace</span>(<span class="st">"LLMB"</span>))</span>
+<span id="cb5-123"><a href="#cb5-123"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

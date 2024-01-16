@@ -66,6 +66,7 @@ library(LLMB)
 
 # Usage 
 
+## Single keywords
 ```{r}
 #| eval: false
 #| code-fold: false
@@ -77,6 +78,26 @@ keyword_search(
 )
 ```
 
+## Multi keywords
+
+```{r}
+#| eval: false
+#| code-fold: false
+tibble(
+    keywords = c("恒大", "碧桂园", "跑路")
+) %>%
+    group_by(keywords) %>%
+    reframe(page = list(1:10)) %>%
+    unnest(page) %>%
+    mutate(
+        data = map2(
+            keywords,
+            page,
+            ~ keyword_search(.x, .y, rows = 500),
+            .progress = TRUE
+        )
+    )
+```
 ```{r}
 #| echo: false
 pacman::p_load(tidyverse, DT) 

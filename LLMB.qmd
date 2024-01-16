@@ -52,7 +52,7 @@ execute:
 body {text-align: justify}
 </style>
 ```
-A package that allows political scientists to perform real-time searches on government responsiveness data within the [Local Leader Message Board](https://liuyan.people.com.cn/), a national platform for petitioning in China @su2016selective. Utilizing the `V8` package, this tool provides a JavaScript environment for [crypto-js](https://www.npmjs.com/package/crypto-js) within R, proving to be extremely helpful for reverse engineering during web scraping tasks. While currently a simple package, further development is underway to add advanced features such as additional data sources and visualization capabilities.
+A package that allows political scientists to perform real-time searches on government responsiveness data within the [Local Leader Message Board](https://liuyan.people.com.cn/), a national platform for petitioning in China [@su2016selective]. Utilizing the `V8` package, this tool provides a JavaScript environment for [crypto-js](https://www.npmjs.com/package/crypto-js) within R, proving to be extremely helpful for reverse engineering during web scraping tasks. While currently a simple package, further development is underway to add advanced features such as additional data sources and visualization capabilities.
 
 # Installation 
 

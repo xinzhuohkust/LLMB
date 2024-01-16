@@ -2,14 +2,6 @@ keyword_search <- purrr::possibly(
   \(keywords = "上访", page = 1, rows = 50, format = "tibble", sleep = sample(seq(1, 2, 0.05), 1)) {
     cryptojs_env <- get(".cryptojs_env", envir = asNamespace("LLMB"))
 
-    cryptojs_env$signature <- purrr::possibly(
-      \(json, url = "/v2/threads/search?sortType=0") {
-        cryptojs_env$engine$eval(sprintf('var e = "%s";', url))
-        cryptojs_env$engine$call("generate_signature", json)
-      },
-      otherwise = \(error) message("\tload signature functions failed: ", error)
-    )
-
     param <- sprintf(
       '{"position":0,"keywords":"%s","fid":null,"domainId":null,"typeId":null,"timeRange":null,"ansChecked":false,"stTime":null,"sortType":"0","page":%s,"rows":%s}',
       keywords,

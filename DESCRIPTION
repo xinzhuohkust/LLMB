@@ -1,0 +1,11 @@
+Package: LLMB
+Type: Package
+Title: A web scraper for the data on governmental responsiveness platform in China
+Version: 0.0.1
+Author: Xinzhuo HUANG
+Maintainer: Xinzhuo HUANG <xhuangcb@connect.ust.hk>
+Description: Automatic reverse engineering by calling JavaScript in R for web scraping.
+License: file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: purrr, httr2, V8, dplyr, tibble

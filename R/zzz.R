@@ -14,7 +14,7 @@
       cryptojs_env$engine$eval(sprintf('var e = "%s";', url))
       cryptojs_env$engine$call("generate_signature", json)
     },
-    otherwise = message("\tload signature functions failed.")
+    otherwise = \(error) message("\tload signature functions failed: ", error)
   )
 
   cryptojs_env$json_to_tibble <- \(x) {

@@ -5,9 +5,9 @@
 
   cryptojs_env$engine <- V8::v8()
 
-  cryptojs_env$engine$source("./inst/js/crypto-js.js")
+  cryptojs_env$engine$source(system.file("js/crypto-js.js", package = pkgname))
 
-  cryptojs_env$engine$source("./inst/js/signature.js")
+  cryptojs_env$engine$source(system.file("js/crypto-js.js", package = pkgname))
 
   cryptojs_env$signature <- purrr::possibly(
     \(json, url = "/v2/threads/search?sortType=0") {

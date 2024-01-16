@@ -1,0 +1,92 @@
+---
+title: "LLMB R package"
+description: "Real-time Search Based on a Keyword "
+date: last-modified
+bibliography: references.bib
+author:
+  - name: Xinzhuo Huang
+    orcid: 0009-0007-6448-5114
+    email: xhuangcb@connect.ust.hk
+    affiliations:
+     - name: HKUST SOSC
+title-block-banner: "#8F999F"
+citation: 
+    author: Huang Xinzhuo
+format: 
+  html:
+    code-line-numbers: true
+    code-block-bg: true
+    code-block-border-left: "#ffffff"
+    code-tools:
+      caption: "Source Code"
+    smooth-scroll: true
+    linestretch: 1.2
+    df-print: paged
+    theme:
+      light: [flatly]
+      dark: [darkly]
+    code-fold: true
+    code-summary: "Show the R code"
+    toc: false
+    citation-location: margin  
+    reference-location: margin
+    citations-hover: true
+    toc-location: right
+    number-sections: true
+    monofont: Georia
+    mainfont: Cambria Math
+    link-citations: yes
+    comments:
+      giscus:
+        repo: xinzhuohkust/comments
+      hypothesis:
+        theme: clean
+
+execute:
+    warning: false
+    message: false
+    error: false
+---
+```{=html}
+<style>
+body {text-align: justify}
+</style>
+```
+A package that allows political scientists to perform real-time searches on government responsiveness data within the [Local Leader Message Board](https://liuyan.people.com.cn/), a national platform for petitioning in China @su2016selective. Utilizing the `V8` package, this tool provides a JavaScript environment for [crypto-js](https://www.npmjs.com/package/crypto-js) within R, proving to be extremely helpful for reverse engineering during web scraping tasks. While currently a simple package, further development is underway to add advanced features such as additional data sources and visualization capabilities.
+
+# Installation 
+
+```{r}
+#| eval: false
+#| code-fold: false
+remotes::install_github("xinzhuohkust/LLMB")
+
+library(LLMB)
+```
+
+# Usage 
+
+```{r}
+#| eval: false
+#| code-fold: false
+keyword_search(
+  keywords = "恒大",
+  page = 1,
+  rows = 10, # or 500
+  format = "tibble" # JSON or string
+)
+```
+
+```{r}
+#| echo: false
+pacman::p_load(tidyverse, DT) 
+
+read_rds("sample_data/sample_data.Rds")
+```
+
+# Call `crypto-js` into R
+
+```{r}
+#| code-fold: false
+cryptojs_env <- get(".cryptojs_env", envir = asNamespace("LLMB"))
+```

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Xinzhuo Huang">
+<meta name="dcterms.date" content="2024-01-16">
+<meta name="description" content="Real-time Search Based on a Keyword">
+
+<title>LLMB R package</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="LLMB_files/libs/clipboard/clipboard.min.js"></script>
+<script src="LLMB_files/libs/quarto-html/quarto.js"></script>
+<script src="LLMB_files/libs/quarto-html/popper.min.js"></script>
+<script src="LLMB_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="LLMB_files/libs/quarto-html/anchor.min.js"></script>
+<link href="LLMB_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="LLMB_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="LLMB_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="LLMB_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="LLMB_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="LLMB_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="LLMB_files/libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<style>html{ scroll-behavior: smooth; }</style>
+<script type="application/json" class="js-hypothesis-config">
+{
+  "theme": "clean"
+}
+</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<style>
+
+      .quarto-title-block .quarto-title-banner {
+        background: #8F999F;
+      }
+</style>
+
+<link href="LLMB_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="LLMB_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+</head>
+
+<body>
+
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">LLMB R package</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Source Code</button></div></div>
+                  <div>
+        <div class="description">
+          Real-time Search Based on a Keyword
+        </div>
+      </div>
+                </div>
+  </div>
+    
+  <div class="quarto-title-meta-author">
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">Affiliation</div>
+    
+      <div class="quarto-title-meta-contents">
+      <p class="author">Xinzhuo Huang <a href="https://orcid.org/0009-0007-6448-5114" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+    </div>
+      <div class="quarto-title-meta-contents">
+          <p class="affiliation">
+              HKUST SOSC
+            </p>
+        </div>
+      </div>
+
+  <div class="quarto-title-meta">
+
+        
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 16, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+<style>
+body {text-align: justify}
+</style>
+<p>A package that allows political scientists to perform real-time searches on government responsiveness data within the <a href="https://liuyan.people.com.cn/">Local Leader Message Board</a>, a national platform for petitioning in China <span class="citation" data-cites="su2016selective">Su and Meng (<a href="#ref-su2016selective" role="doc-biblioref">2016</a>)</span>. Utilizing the <code>V8</code> package, this tool provides a JavaScript environment for <a href="https://www.npmjs.com/package/crypto-js">crypto-js</a> within R, proving to be extremely helpful for reverse engineering during web scraping tasks. While currently a simple package, further development is underway to add advanced features such as additional data sources and visualization capabilities.</p>
+<div class="no-row-height column-margin column-container"><div id="ref-su2016selective" class="csl-entry" role="listitem">
+Su, Zheng, and Tianguang Meng. 2016. <span>“Selective Responsiveness: Online Public Demands and Government Responsiveness in Authoritarian China.”</span> <em>Social Science Research</em> 59: 52–67.
+</div></div><section id="installation" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Installation</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"xinzhuohkust/LLMB"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(LLMB)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="usage" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Usage</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">keyword_search</span>(</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="at">keywords =</span> <span class="st">"恒大"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="at">page =</span> <span class="dv">1</span>,</span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="at">rows =</span> <span class="dv">10</span>, <span class="co"># or 500</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="at">format =</span> <span class="st">"tibble"</span> <span class="co"># JSON or string</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["tid"],"name":[1],"type":["int"],"align":["right"]},{"label":["fid"],"name":[2],"type":["int"],"align":["right"]},{"label":["forumName"],"name":[3],"type":["chr"],"align":["left"]},{"label":["subject"],"name":[4],"type":["chr"],"align":["left"]},{"label":["nickName"],"name":[5],"type":["chr"],"align":["left"]},{"label":["typeId"],"name":[6],"type":["int"],"align":["right"]},{"label":["domainId"],"name":[7],"type":["int"],"align":["right"]},{"label":["typeName"],"name":[8],"type":["chr"],"align":["left"]},{"label":["domainName"],"name":[9],"type":["chr"],"align":["left"]},{"label":["stateInfo"],"name":[10],"type":["chr"],"align":["left"]},{"label":["createDateline"],"name":[11],"type":["dttm"],"align":["right"]},{"label":["dateline"],"name":[12],"type":["dttm"],"align":["right"]},{"label":["userType"],"name":[13],"type":["int"],"align":["right"]},{"label":["videoDuration"],"name":[14],"type":["int"],"align":["right"]},{"label":["content"],"name":[15],"type":["chr"],"align":["left"]},{"label":["threadsCheckTime"],"name":[16],"type":["int"],"align":["right"]},{"label":["attachment"],"name":[17],"type":["int"],"align":["right"]},{"label":["threadState"],"name":[18],"type":["int"],"align":["right"]},{"label":["lastAnswerTime"],"name":[19],"type":["int"],"align":["right"]},{"label":["feedbackState"],"name":[20],"type":["int"],"align":["right"]},{"label":["processState"],"name":[21],"type":["int"],"align":["right"]},{"label":["traceState"],"name":[22],"type":["int"],"align":["right"]},{"label":["traceStateDesc"],"name":[23],"type":["chr"],"align":["left"]},{"label":["fav"],"name":[24],"type":["int"],"align":["right"]},{"label":["favNum"],"name":[25],"type":["int"],"align":["right"]},{"label":["likesNum"],"name":[26],"type":["int"],"align":["right"]},{"label":["position"],"name":[27],"type":["int"],"align":["right"]},{"label":["markState"],"name":[28],"type":["int"],"align":["right"]},{"label":["publicAttachment"],"name":[29],"type":["int"],"align":["right"]},{"label":["publicState"],"name":[30],"type":["int"],"align":["right"]},{"label":["lastUpdate"],"name":[31],"type":["dttm"],"align":["right"]},{"label":["collectId"],"name":[32],"type":["int"],"align":["right"]},{"label":["topicId"],"name":[33],"type":["int"],"align":["right"]},{"label":["satisfactionType"],"name":[34],"type":["int"],"align":["right"]},{"label":["forumPathName"],"name":[35],"type":["chr"],"align":["left"]},{"label":["leaderAttention"],"name":[36],"type":["int"],"align":["right"]},{"label":["hurryAuthority"],"name":[37],"type":["int"],"align":["right"]},{"label":["readState"],"name":[38],"type":["int"],"align":["right"]},{"label":["threadPlace"],"name":[39],"type":["chr"],"align":["left"]}],"data":[{"1":"19250553","2":"2442","3":"河南省安阳市林州市委书记","4":"林州<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>燃气","5":"18********5","6":"2","7":"7","8":"投诉/求助","9":"城建","10":"已办理","11":"2023-11-13 11:57:02","12":"2023-11-13 11:57:02","13":"0","14":"0","15":"林州<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>燃气什么时间能通？今年暖气会不会通？","16":"1699922963","17":"0","18":"1","19":"1700613577","20":"0","21":"2","22":"3","23":"已回复待评价","24":"0","25":"0","26":"0","27":"0","28":"0","29":"0","30":"1","31":"2023-12-07 08:41:29","32":"0","33":"0","34":"2","35":"河南省林州市委书记","36":"0","37":"0","38":"0","39":"NA"},{"1":"19168519","2":"1659","3":"河北省邯郸市丛台区委书记","4":"丛台区<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>绿洲","5":"18********8","6":"1","7":"7","8":"咨询","9":"城建","10":"已办理","11":"2023-11-01 09:27:46","12":"2023-11-01 09:27:46","13":"0","14":"0","15":"丛台区<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>绿洲小区何时接入市政管网，何时有暖气，燃气，正式电。","16":"1698887325","17":"0","18":"1","19":"1702356056","20":"0","21":"1","22":"3","23":"已回复待评价","24":"0","25":"0","26":"0","27":"0","28":"0","29":"0","30":"1","31":"2023-12-27 12:41:53","32":"0","33":"0","34":"2","35":"河北省丛台区委书记","36":"0","37":"0","38":"0","39":"河北省邯郸市丛台区政府街与卢生庙南路交汇处东南侧（邯郸恒大绿洲）"},{"1":"18556988","2":"1116","3":"山东省威海市市长孔凡萍","4":"威海<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>影院","5":"13********9","6":"2","7":"10","8":"投诉/求助","9":"文娱","10":"已办理","11":"2023-08-01 11:22:37","12":"2023-08-01 11:22:37","13":"0","14":"0","15":"<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>影城内所有电梯都不好用，很不方便。希望部门处理","16":"1690871989","17":"0","18":"1","19":"1692174049","20":"0","21":"0","22":"3","23":"已回复待评价","24":"0","25":"0","26":"0","27":"0","28":"0","29":"0","30":"1","31":"2023-08-31 16:23:11","32":"0","33":"0","34":"2","35":"山东省威海市市长孔凡萍","36":"0","37":"0","38":"0","39":"NA"},{"1":"17458334","2":"3768","3":"山西省太原市小店区委书记","4":"<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>绿洲漏水","5":"15********5","6":"2","7":"7","8":"投诉/求助","9":"城建","10":"已办理","11":"2023-03-01 11:55:55","12":"2023-03-01 11:55:55","13":"0","14":"0","15":"<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>绿洲十一号楼整体漏水十年之久得不到解决，一楼家里都没办法住人了。","16":"1677661976","17":"0","18":"1","19":"1679018532","20":"0","21":"0","22":"1","23":"已回复待评价","24":"0","25":"1","26":"0","27":"0","28":"0","29":"0","30":"1","31":"2023-03-17 10:02:12","32":"0","33":"147","34":"0","35":"山西省小店区委书记","36":"0","37":"0","38":"0","39":"NA"},{"1":"17742162","2":"2852","3":"广东省佛山市南海区委书记","4":"<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>悦府小学还是村小","5":"13********0","6":"2","7":"14","8":"投诉/求助","9":"教育","10":"已办理","11":"2023-04-07 08:37:39","12":"2023-04-07 08:37:39","13":"0","14":"0","15":"<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>悦府交楼5年，3000多户的小区，门口的滨湖路规划通往穗盐西路，交楼5年，一直未通<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>悦府一个南海艺术中心核心区的楼盘，小学还是河西小学诉求1、政府尽快打通滨湖路到穗盐西路的道路，改善民生2解决<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>悦府的优质公立学位问题，暂未新建的话，分配到石门<label style='color:#D5313F'>大<\/label>沥小学。请政府重视<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>悦府的问题，谢谢","16":"1680944492","17":"0","18":"1","19":"1682300726","20":"0","21":"2","22":"1","23":"已回复待评价","24":"0","25":"1","26":"0","27":"0","28":"0","29":"0","30":"1","31":"2023-04-24 09:45:26","32":"0","33":"0","34":"0","35":"广东省南海区委书记","36":"0","37":"0","38":"0","39":"NA"},{"1":"17063904","2":"2389","3":"河南省洛阳市瀍河回族区委书记","4":"<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>绿洲乱停车","5":"17********2","6":"5","7":"7","8":"建言","9":"城建","10":"已办理","11":"2023-01-01 20:23:35","12":"2023-01-01 20:23:35","13":"0","14":"0","15":"<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>绿洲西区三川大道辅道。三车道违停车辆能占用两个车道，严重影响车辆通行安全。 \\n中州东路<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>绿洲天弟门口，违停车辆能从非机动车道排到中州路上，严重影响出行安全。","16":"1672636344","17":"0","18":"1","19":"1673853890","20":"1","21":"0","22":"3","23":"一次评价待解释","24":"0","25":"0","26":"0","27":"0","28":"0","29":"0","30":"1","31":"2023-11-22 13:46:24","32":"0","33":"0","34":"1","35":"河南省瀍河回族区委书记","36":"0","37":"0","38":"0","39":"NA"},{"1":"17450353","2":"2823","3":"广东省广州市增城区委书记","4":"请问<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>紫荆学府的小学目前有何进展","5":"18********0","6":"1","7":"7","8":"咨询","9":"城建","10":"已办理","11":"2023-02-28 16:32:53","12":"2023-02-28 16:32:53","13":"0","14":"0","15":"<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>紫荆学府附近有个小学，之前是<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>复杂建设的，现在<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>退场以后这个学校一直停工。请问这个学校目前有什么安排","16":"1677652220","17":"0","18":"1","19":"1678088276","20":"0","21":"2","22":"1","23":"已回复待评价","24":"0","25":"0","26":"0","27":"0","28":"0","29":"0","30":"1","31":"2023-03-06 15:37:56","32":"0","33":"0","34":"0","35":"广东省增城区委书记","36":"0","37":"0","38":"0","39":"NA"},{"1":"18856061","2":"561","3":"安徽省委书记韩俊","4":"铜陵<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>御府物业费问题","5":"18********0","6":"2","7":"7","8":"投诉/求助","9":"城建","10":"已办理","11":"2023-09-10 13:32:06","12":"2023-09-10 13:32:06","13":"0","14":"0","15":"尊敬的市委书记，我是一名遵纪守法的公民，现有以下事情求助市委市政府：1、购买铜陵<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>御府房屋时承诺减免3年物业费，现<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>御府物业公司拒不承认，还催缴我的物业费。希望<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>物业遵守法律，尊重契约，履行减免三年物业费。2、<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>御府交房时未精装修完成，装修甩项补偿了7万多的空头“支票”，万般无奈下选了一个车","16":"1694401740","17":"0","18":"1","19":"1695112430","20":"0","21":"0","22":"3","23":"已回复待评价","24":"0","25":"0","26":"0","27":"0","28":"0","29":"0","30":"1","31":"2023-10-04 16:34:33","32":"0","33":"0","34":"2","35":"安徽省委书记韩俊","36":"0","37":"0","38":"0","39":"NA"},{"1":"17659391","2":"811","3":"河北省邯郸市委书记李晋宇","4":"丛台区<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>绿洲孩子无学可上","5":"15********2","6":"2","7":"14","8":"投诉/求助","9":"教育","10":"已办理","11":"2023-03-24 16:48:29","12":"2023-03-24 16:48:29","13":"0","14":"0","15":"我是邯郸市丛台区<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>绿洲业主，现在<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>绿洲已交房，可是孩子无法上学，没有片内小学，现在孩子无学可上了，诚请领导协调孩子上学问题。","16":"1679834996","17":"0","18":"1","19":"1681721970","20":"0","21":"1","22":"1","23":"已回复待评价","24":"0","25":"1","26":"0","27":"0","28":"0","29":"0","30":"1","31":"2023-04-17 16:59:30","32":"0","33":"0","34":"0","35":"河北省邯郸市委书记李晋宇","36":"0","37":"0","38":"0","39":"河北省邯郸市丛台区中华北大街（丛台区黄粱梦镇芦英堡村）"},{"1":"17274137","2":"3770","3":"山西省太原市尖草坪区委书记","4":"<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>御景湾对口学校咨询","5":"13********5","6":"1","7":"14","8":"咨询","9":"教育","10":"已办理","11":"2023-02-08 15:31:59","12":"2023-02-08 15:31:59","13":"0","14":"0","15":"1.<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>御景湾对口中学是哪一所2.<label style='color:#D5313F'>恒<\/label><label style='color:#D5313F'>大<\/label>御景湾小升初是需要摇号么，还是直升","16":"1675987416","17":"0","18":"1","19":"1677139434","20":"0","21":"2","22":"1","23":"已回复待评价","24":"0","25":"0","26":"0","27":"0","28":"0","29":"0","30":"1","31":"2023-02-23 16:03:54","32":"0","33":"0","34":"0","35":"山西省尖草坪区委书记","36":"0","37":"0","38":"0","39":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</section>
+<section id="call-crypto-js-into-r" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Call <code>crypto-js</code> into R</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>cryptojs_env <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="st">".cryptojs_env"</span>, <span class="at">envir =</span> <span class="fu">asNamespace</span>(<span class="st">"LLMB"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- -->
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{xinzhuo2024,
+  author = {Xinzhuo, Huang},
+  title = {LLMB {R} Package},
+  date = {2024-01-16},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-xinzhuo2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Xinzhuo, Huang. 2024. <span>“LLMB R Package.”</span> January 16, 2024.
+</div></div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="xinzhuohkust/comments" data-repo-id="R_kgDOIfEW2g" data-category="General" data-category-id="DIC_kwDOIfEW2s4CStOg" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">---</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="an">title:</span><span class="co"> "LLMB R package"</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="an">description:</span><span class="co"> "Real-time Search Based on a Keyword "</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="an">bibliography:</span><span class="co"> references.bib</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="an">author:</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">  - name: Xinzhuo Huang</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">    orcid: 0009-0007-6448-5114</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">    email: xhuangcb@connect.ust.hk</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">    affiliations:</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">     - name: HKUST SOSC</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="an">title-block-banner:</span><span class="co"> "#8F999F"</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="an">citation:</span><span class="co"> </span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">    author: Huang Xinzhuo</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="co">  html:</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="co">    code-block-bg: true</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="co">    code-block-border-left: "#ffffff"</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="co">    code-tools:</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a><span class="co">      caption: "Source Code"</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a><span class="co">    smooth-scroll: true</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="co">    linestretch: 1.2</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="co">    df-print: paged</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a><span class="co">    theme:</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="co">      light: [flatly]</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a><span class="co">      dark: [darkly]</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a><span class="co">    code-fold: true</span></span>
+<span id="cb4-29"><a href="#cb4-29"></a><span class="co">    code-summary: "Show the R code"</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a><span class="co">    toc: false</span></span>
+<span id="cb4-31"><a href="#cb4-31"></a><span class="co">    citation-location: margin  </span></span>
+<span id="cb4-32"><a href="#cb4-32"></a><span class="co">    reference-location: margin</span></span>
+<span id="cb4-33"><a href="#cb4-33"></a><span class="co">    citations-hover: true</span></span>
+<span id="cb4-34"><a href="#cb4-34"></a><span class="co">    toc-location: right</span></span>
+<span id="cb4-35"><a href="#cb4-35"></a><span class="co">    number-sections: true</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a><span class="co">    monofont: Georia</span></span>
+<span id="cb4-37"><a href="#cb4-37"></a><span class="co">    mainfont: Cambria Math</span></span>
+<span id="cb4-38"><a href="#cb4-38"></a><span class="co">    link-citations: yes</span></span>
+<span id="cb4-39"><a href="#cb4-39"></a><span class="co">    comments:</span></span>
+<span id="cb4-40"><a href="#cb4-40"></a><span class="co">      giscus:</span></span>
+<span id="cb4-41"><a href="#cb4-41"></a><span class="co">        repo: xinzhuohkust/comments</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a><span class="co">      hypothesis:</span></span>
+<span id="cb4-43"><a href="#cb4-43"></a><span class="co">        theme: clean</span></span>
+<span id="cb4-44"><a href="#cb4-44"></a></span>
+<span id="cb4-45"><a href="#cb4-45"></a><span class="an">execute:</span></span>
+<span id="cb4-46"><a href="#cb4-46"></a><span class="co">    warning: false</span></span>
+<span id="cb4-47"><a href="#cb4-47"></a><span class="co">    message: false</span></span>
+<span id="cb4-48"><a href="#cb4-48"></a><span class="co">    error: false</span></span>
+<span id="cb4-49"><a href="#cb4-49"></a><span class="co">---</span></span>
+<span id="cb4-50"><a href="#cb4-50"></a><span class="in">```{=html}</span></span>
+<span id="cb4-51"><a href="#cb4-51"></a><span class="in">&lt;style&gt;</span></span>
+<span id="cb4-52"><a href="#cb4-52"></a><span class="in">body {text-align: justify}</span></span>
+<span id="cb4-53"><a href="#cb4-53"></a><span class="in">&lt;/style&gt;</span></span>
+<span id="cb4-54"><a href="#cb4-54"></a><span class="in">```</span></span>
+<span id="cb4-55"><a href="#cb4-55"></a>A package that allows political scientists to perform real-time searches on government responsiveness data within the <span class="co">[</span><span class="ot">Local Leader Message Board</span><span class="co">](https://liuyan.people.com.cn/)</span>, a national platform for petitioning in China @su2016selective. Utilizing the <span class="in">`V8`</span> package, this tool provides a JavaScript environment for <span class="co">[</span><span class="ot">crypto-js</span><span class="co">](https://www.npmjs.com/package/crypto-js)</span> within R, proving to be extremely helpful for reverse engineering during web scraping tasks. While currently a simple package, further development is underway to add advanced features such as additional data sources and visualization capabilities.</span>
+<span id="cb4-56"><a href="#cb4-56"></a></span>
+<span id="cb4-57"><a href="#cb4-57"></a><span class="fu"># Installation </span></span>
+<span id="cb4-58"><a href="#cb4-58"></a></span>
+<span id="cb4-61"><a href="#cb4-61"></a><span class="in">```{r}</span></span>
+<span id="cb4-62"><a href="#cb4-62"></a><span class="co">#| eval: false</span></span>
+<span id="cb4-63"><a href="#cb4-63"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb4-64"><a href="#cb4-64"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"xinzhuohkust/LLMB"</span>)</span>
+<span id="cb4-65"><a href="#cb4-65"></a></span>
+<span id="cb4-66"><a href="#cb4-66"></a><span class="fu">library</span>(LLMB)</span>
+<span id="cb4-67"><a href="#cb4-67"></a><span class="in">```</span></span>
+<span id="cb4-68"><a href="#cb4-68"></a></span>
+<span id="cb4-69"><a href="#cb4-69"></a><span class="fu"># Usage </span></span>
+<span id="cb4-70"><a href="#cb4-70"></a></span>
+<span id="cb4-73"><a href="#cb4-73"></a><span class="in">```{r}</span></span>
+<span id="cb4-74"><a href="#cb4-74"></a><span class="co">#| eval: false</span></span>
+<span id="cb4-75"><a href="#cb4-75"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb4-76"><a href="#cb4-76"></a><span class="fu">keyword_search</span>(</span>
+<span id="cb4-77"><a href="#cb4-77"></a>  <span class="at">keywords =</span> <span class="st">"恒大"</span>,</span>
+<span id="cb4-78"><a href="#cb4-78"></a>  <span class="at">page =</span> <span class="dv">1</span>,</span>
+<span id="cb4-79"><a href="#cb4-79"></a>  <span class="at">rows =</span> <span class="dv">10</span>, <span class="co"># or 500</span></span>
+<span id="cb4-80"><a href="#cb4-80"></a>  <span class="at">format =</span> <span class="st">"tibble"</span> <span class="co"># JSON or string</span></span>
+<span id="cb4-81"><a href="#cb4-81"></a>)</span>
+<span id="cb4-82"><a href="#cb4-82"></a><span class="in">```</span></span>
+<span id="cb4-83"><a href="#cb4-83"></a></span>
+<span id="cb4-86"><a href="#cb4-86"></a><span class="in">```{r}</span></span>
+<span id="cb4-87"><a href="#cb4-87"></a><span class="co">#| echo: false</span></span>
+<span id="cb4-88"><a href="#cb4-88"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, DT) </span>
+<span id="cb4-89"><a href="#cb4-89"></a></span>
+<span id="cb4-90"><a href="#cb4-90"></a><span class="fu">read_rds</span>(<span class="st">"sample_data/sample_data.Rds"</span>)</span>
+<span id="cb4-91"><a href="#cb4-91"></a><span class="in">```</span></span>
+<span id="cb4-92"><a href="#cb4-92"></a></span>
+<span id="cb4-93"><a href="#cb4-93"></a><span class="fu"># Call `crypto-js` into R</span></span>
+<span id="cb4-94"><a href="#cb4-94"></a></span>
+<span id="cb4-97"><a href="#cb4-97"></a><span class="in">```{r}</span></span>
+<span id="cb4-98"><a href="#cb4-98"></a><span class="co">#| code-fold: false</span></span>
+<span id="cb4-99"><a href="#cb4-99"></a>cryptojs_env <span class="ot">&lt;-</span> <span class="fu">get</span>(<span class="st">".cryptojs_env"</span>, <span class="at">envir =</span> <span class="fu">asNamespace</span>(<span class="st">"LLMB"</span>))</span>
+<span id="cb4-100"><a href="#cb4-100"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+<script src="LLMB_files/libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
